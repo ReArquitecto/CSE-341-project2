@@ -2,52 +2,83 @@ const mongodb = require('../db/connect.js');
 const ObjectId = require('mongodb').ObjectId;
 
 const getAllShoes = async (req, res) => {
+  //#swagger.tags=['Course-Instances'];
   try {
-    const shoes = await mongodb.db.collection('shoes').find().toArray();
-    res.json(shoes);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    const db = mongodb.getDb();
+    const shoes = await db
+      .collection('shoes')
+      .find()
+      .toArray();
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json(shoes);
   }
-};
+  catch (err) {
+    res.status(500).json(err);
+  }
+}
 
 const getSingleShoe = async (req, res) => {
+  //#swagger.tags=['Shoes'];
   try {
-    const shoe = await mongodb.db.collection('shoes').findOne({ _id: ObjectId(req.params.id) });
-    res.json(shoe);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    const db = mongodb.getDb();
+    const shoe = await db
+      .collection('shoes')
+      .findOne({ _id: ObjectId(req.params.id) });
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json(shoe);
+  }
+  catch (err) {
+    res.status(500).json(err);
   }
 }
 
 const createShoe = async (req, res) => {
+  //#swagger.tags=['Shoes'];
   try {
-    const shoe = await mongodb.db.collection('shoes').insertOne(req.body);
+    const db = mongodb.getDb();
+    const shoe = await db
+      .collection('shoes')
+      .insertOne(req.body);
+    res.setHeader('Content-Type', 'application/json');
     res.status(201).json(shoe);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
   }
-};
+  catch (err) {
+    res.status(400).json(err);
+  }
+}
 
 const updateShoe = async (req, res) => {
+  //#swagger.tags=['Shoes'];
   try {
-    const shoe = await mongodb.db.collection('shoes').updateOne(
-      { _id: ObjectId(req.params.id) },
-      { $set: req.body }
-    );
-    res.json(shoe);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
+    const db = mongodb.getDb();
+    const shoe = await db
+      .collection('shoes')
+      .updateOne(
+        { _id: ObjectId(req.params.id) },
+        { $set: req.body }
+      );
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json(shoe);
+  }
+  catch (err) {
+    res.status(400).json(err);
   }
 }
 
 const deleteShoe = async (req, res) => {
+  //#swagger.tags=['Shoes'];
   try {
-    const shoe = await mongodb.db.collection('shoes').deleteOne({ _id: ObjectId(req.params.id) });
-    res.json(shoe);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
+    const db = mongodb.getDb();
+    const shoe = await db
+      .collection('shoes')
+      .deleteOne({ _id: ObjectId(req.params.id) });
+    res.setHeader('Content-Type', 'application/json');
+    res.status(200).json(shoe);
   }
-};
+  catch (err) {
+    res.status(500).json(err);
+  }
+}
 
 module.exports = {
   getAllShoes,
