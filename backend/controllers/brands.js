@@ -105,9 +105,9 @@ const deleteBrand = async (req, res) => {
     const brandId = new ObjectId(req.params.id);
 
     // Check if any shoes are using this brand
-    const shoeUsingBrand = await db.collection('shoes').findOne({ brand: brandId });
-    if (shoeUsingBrand) {
-      return res.status(400).json({ message: 'Cannot delete brand, it is being used in shoes' });
+    const shoesUsingBrand = await db.collection('shoes').findOne({ brand: brandId });
+    if (shoesUsingBrand) {
+      return res.status(400).json({ message: 'Brand is in use' });
     }
 
     const brand = await db.collection('brands').deleteOne({ _id: brandId });

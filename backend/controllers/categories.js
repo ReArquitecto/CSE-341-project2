@@ -108,9 +108,9 @@ const deleteCategory = async (req, res) => {
     const categoryId = new ObjectId(req.params.id);
 
     // Check if any shoes are using this category
-    const shoeUsingCategory = await db.collection('shoes').findOne({ category: categoryId });
-    if (shoeUsingCategory) {
-      return res.status(400).json({ message: 'Cannot delete category, it is being used in shoes' });
+    const shoesUsingCategory = await db.collection('shoes').find({ category: categoryId }).toArray();
+    if (shoesUsingCategory.length > 0) {
+      return res.status(400).json({ message: 'Cannot delete category while shoes are using it' });
     }
 
     const category = await db.collection('categories').deleteOne({ _id: categoryId });
